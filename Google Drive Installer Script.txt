@@ -1,0 +1,28 @@
+﻿#!/bin/zsh
+
+# make temp folder for downloads
+mkdir "/tmp/googledrive"
+
+# change working directory
+cd "/tmp/googledrive"
+
+#download Google Drive File Stream
+curl -L -o "/tmp/googledrive/GoogleDrive.dmg" "https://dl.google.com/drive-file-stream/GoogleDrive.dmg"
+
+# Mount the DMG
+hdiutil attach GoogleDrive.dmg -nobrowse
+
+# Get Volume Name
+Volume=$(diskutil info / | grep "Volume Name:" | awk '{print $3,$4,$5,$6}')
+
+# Install Google Drive
+sudo installer -pkg /Volumes/Install\ Google\ Drive/GoogleDrive.pkg -target /
+
+#Tidy Up
+hdiutil unmount "/Volumes/Install Google Drive"
+sleep 5
+sudo rm -rf "/tmp/googledrive"
+sleep 5
+
+#Bless Google Drive app
+xattr -rc "/Applications/Google Drive.app"

@@ -1,0 +1,4 @@
+﻿#!/bin/bash
+killall "Google Chrome"
+rm -rf /Applications/Google\ Chrome.app
+exit 0

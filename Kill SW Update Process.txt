@@ -1,0 +1,46 @@
+﻿#!/bin/bash
+
+pid1=$(pgrep SoftwareUpdateNotificationManager)
+echo "$pid1"
+
+pid3=$(pgrep com.apple.preferences.softwareupdate.remoteservice)
+echo "$pid3"
+
+pid4=$(pgrep com.apple.MobileSoftwareUpdate.CleanupPreparePathService)
+echo "$pid4"
+
+pid5=$(pgrep com.apple.MobileSoftwareUpdate.UpdateBrainService)
+echo "$pid5"
+
+if [ "$pid1" = "" ]; then
+echo "pid1 is empty"
+else
+kill -9 "$pid1"
+echo "pid1 was killed"
+fi
+
+if [ "$pid3" = "" ]; then
+echo "pid3 is empty"
+else
+kill -9 "$pid3"
+echo "pid3 was killed"
+fi
+
+if [ "$pid4" = "" ]; then
+echo "pid4 is empty"
+else
+kill -9 "$pid4"
+echo "pid4 was killed"
+fi
+
+if [ "$pid5" = "" ]; then
+echo "pid5 is empty"
+else
+kill -9 "$pid5"
+echo "pid5 was killed"
+fi
+
+launchctl kickstart -k system/com.apple.softwareupdated
+echo "com.apple.softwareupdated kickstarted"
+
+exit 0

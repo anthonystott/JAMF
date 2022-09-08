@@ -1,0 +1,103 @@
+﻿#!/bin/bash
+
+runInstaller () {
+	echo "Monterey installer present"
+	osascript -e 'quit app "Install macOS Monterey"'
+	sleep 2
+	buttonClicked=$(/Library/Application\ Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper -windowType utility -title "Upgrade to macOS Monterey" -description "macOS Monterey installer is present in the Applications folder.
+
+Press 'OK' to continue with the upgrade process. 
+
+Please make sure you have a working backup of your files before starting the upgrade process.
+" -icon "/Applications/Install macOS Monterey.app/Contents/Resources/InstallAssistant.icns" -button1 "OK" -button2 "Cancel")
+	
+	if [[ $buttonClicked == 0 ]]; then
+		echo "upgrade starting"
+		##Title to be used for jamfHelper
+		description="Please wait as we prepare your computer for macOS Monterey...
+
+This process will take approximately 15-30 minutes.
+
+Once completed your computer will reboot and begin the upgrade."
+		
+		##Icon to be used for jamfHelper
+		icon=/Applications/Install\ macOS\ Monterey.app/Contents/Resources/InstallAssistant.icns
+		
+		##Launch jamfHelper
+		/Library/Application\ Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper -windowType utility -title "" -icon "$icon" -description "$description" &
+		
+		jamfHelperPID=$(ps axco pid,command | grep jamfHelper | awk '{ print $1; }')
+		
+		##Start macOS Upgrade
+		/Applications/Install\ macOS\ Monterey.app/Contents/Resources/startosinstall --agreetolicense --nointeraction --forcequitapps --pidtosignal $jamfHelperPID >> /var/log/startosinstall.log 2>&1 &
+		
+		exit 0
+		
+	else
+		echo "User cancelled the upgrade."
+		exit 0
+	fi
+}
+
+macOSVersion="$4"
+
+downloadInstaller () {
+	echo "No installer... downloading"
+	/Library/Application\ Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper -windowType utility -title "Upgrade to macOS Monterey" -description "macOS Monterey installer must be downloaded before installation can begin. 
+
+This task may take approximately 30 minutes but may take longer depending on your internet connection speed." -icon "/System/Library/PreferencePanes/SoftwareUpdate.prefPane/Contents/Resources/SoftwareUpdate.icns" -button1 "OK"
+	
+	caffeinate -i /usr/sbin/softwareupdate --fetch-full-installer --full-installer-version "$macOSVersion"
+	
+	while [  ! -f /Applications/Install\ macOS\ Monterey.app ]
+	do
+		sleep 300
+		echo "Monterey downloading"
+		if [ -e /Applications/Install\ macOS\ Monterey.app ];
+		then
+			echo "Monterey installer present"
+			osascript -e 'quit app "Install macOS Monterey"'
+			sleep 2
+			buttonClicked=$(/Library/Application\ Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper -windowType utility -title "Upgrade to macOS Monterey" -description "macOS Monterey installer is present in Applications folder.
+
+Press 'OK' to continue with the upgrade process. 
+
+Please make sure you have a working backup of your files before starting the upgrade process.
+" -icon "/Applications/Install macOS Monterey.app/Contents/Resources/InstallAssistant.icns" -button1 "OK" -button2 "Cancel")
+			
+			if [[ $buttonClicked == 0 ]]; then
+				echo "upgrade starting"
+				##Title to be used for jamfHelper
+				description="Please wait as we prepare your computer for macOS Monterey...
+
+This process will take approximately 15-30 minutes.
+
+Once completed your computer will reboot and begin the upgrade."
+				
+				##Icon to be used for jamfHelper
+				icon=/Applications/Install\ macOS\ Monterey.app/Contents/Resources/InstallAssistant.icns
+				
+				##Launch jamfHelper
+				/Library/Application\ Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper -windowType utility -title "" -icon "$icon" -heading "$heading" -description "$description" &
+				
+				jamfHelperPID=$(ps axco pid,command | grep jamfHelper | awk '{ print $1; }')
+				
+				##Start macOS Upgrade
+				/Applications/Install\ macOS\ Monterey.app/Contents/Resources/startosinstall --agreetolicense --nointeraction --forcequitapps --pidtosignal $jamfHelperPID >> /var/log/startosinstall.log 2>&1 &
+				break
+				exit 0
+			else
+				echo "User cancelled the upgrade."
+				exit 0
+			fi
+			
+		fi
+	done 
+}
+
+if [[ -e /Applications/Install\ macOS\ Monterey.app ]]
+then
+	runInstaller 
+else
+	downloadInstaller 
+fi

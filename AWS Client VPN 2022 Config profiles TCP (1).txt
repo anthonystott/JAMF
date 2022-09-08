@@ -1,0 +1,22 @@
+﻿#!/bin/bash
+
+#Find the logged in user
+loggedInUser=$(stat -f %Su /dev/console)
+
+#Set the file path to the ConnectionProfiles file with the loggedIn user
+connectionProfiles="/Users/$loggedInUser/.config/AWSVPNClient/ConnectionProfiles"
+
+#If directory not there create it.
+mkdir -p "/Users/$loggedInUser/.config/AWSVPNClient/"
+
+#Set the file path to the ConnectionProfiles file with the loggedIn user
+connectionProfiles="/Users/$3/.config/AWSVPNClient/ConnectionProfiles"
+
+#make the file
+cat <<EOF > "$connectionProfiles"
+{"Version":"1","LastSelectedProfileIndex":0,"ConnectionProfiles":[{"ProfileName":"VPN Staff - Okta","OvpnConfigFilePath":"/Users/$3/.config/AWSVPNClient/OpenVpnConfigs/VPN Staff - Okta","CvpnEndpointId":"","CvpnEndpointRegion":"","CompatibilityVersion":"2","FederatedAuthType":1},{"ProfileName":"VPN Analyst - Okta","OvpnConfigFilePath":"/Users/$3/.config/AWSVPNClient/OpenVpnConfigs/VPN Analyst - Okta","CvpnEndpointId":"","CvpnEndpointRegion":"","CompatibilityVersion":"2","FederatedAuthType":1},{"ProfileName":"VPN Engineer - Okta","OvpnConfigFilePath":"/Users/$3/.config/AWSVPNClient/OpenVpnConfigs/VPN Engineer - Okta","CvpnEndpointId":"","CvpnEndpointRegion":"","CompatibilityVersion":"2","FederatedAuthType":1},{"ProfileName":"VPN Staff - Okta - TCP","OvpnConfigFilePath":"/Users/$3/.config/AWSVPNClient/OpenVpnConfigs/VPN Staff - Okta - TCP","CvpnEndpointId":"","CvpnEndpointRegion":"","CompatibilityVersion":"2","FederatedAuthType":1},{"ProfileName":"VPN Analyst - Okta - TCP","OvpnConfigFilePath":"/Users/$3/.config/AWSVPNClient/OpenVpnConfigs/VPN Analyst - Okta - TCP","CvpnEndpointId":"","CvpnEndpointRegion":"","CompatibilityVersion":"2","FederatedAuthType":1},{"ProfileName":"VPN Engineer - Okta - TCP","OvpnConfigFilePath":"/Users/$3/.config/AWSVPNClient/OpenVpnConfigs/VPN Engineer - Okta - TCP","CvpnEndpointId":"","CvpnEndpointRegion":"","CompatibilityVersion":"2","FederatedAuthType":1}]}
+EOF
+
+#Fix permissions
+
+chown "$loggedInUser" "$connectionProfiles"

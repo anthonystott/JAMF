@@ -1,0 +1,36 @@
+﻿#!/bin/bash
+
+# Tableau uninstaller
+# Written by: Patrick Gallagher
+
+appPath_Array=(
+  'Tableau Desktop 2021.3'
+  'Tableau Desktop 2021.2'
+  'Tableau Desktop 2021.1'
+  'Tableau Desktop 2020.4'
+  'Tableau Desktop 2020.3'
+  'Tableau Desktop 2020.2'
+  'Tableau Desktop 2020.1'
+  'Tableau Desktop 2018.1'
+  'Tableau Desktop 2018.2'
+  'Tableau Desktop 2018.3'
+  'Tableau Desktop 2019.1'
+  'Tableau Desktop 2019.2'
+  'Tableau Desktop 2019.3'
+  'Tableau Desktop 10.3'
+  'Tableau Desktop 10.4'
+  'Tableau Desktop 10.5'
+  'Tableau'
+  'Tableau Reader 2018.3'
+  'Tableau Reader 2019.1'
+  'Tableau Reader 2019.2'
+  'Tableau Reader 2019.3'
+  'Tableau Reader 2019.4'
+  'Tableau Reader 2020.1'
+  'Tableau Public'
+)
+
+for i in "${appPath_Array[@]}"; do
+  rm -rf "/Applications/$i.app"
+  #touch "/Applications/$i.app"
+done

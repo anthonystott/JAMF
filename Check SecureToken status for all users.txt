@@ -1,0 +1,10 @@
+﻿#!/bin/bash
+# created by Bartosz Zachara
+# v1 - last edit: 07 Dec 2021
+
+localUsers=$(dscl . list /Users | grep -v ^_.*)
+
+for i in $localUsers; do
+	secureTokenStatus=$(sysadminctl -secureTokenStatus $i 2>&1 | /usr/bin/awk '{ print $7 }')
+	echo "SecureToken status for $i is $secureTokenStatus"
+done

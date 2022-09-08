@@ -1,0 +1,13 @@
+﻿#!/bin/bash
+
+
+open "/Applications/AWS VPN Client/AWS VPN Client.app"
+
+sleep 10
+
+killall "AWS VPN Client"
+
+
+
+
+jamf policy -event awsconfig

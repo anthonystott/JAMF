@@ -1,0 +1,14 @@
+﻿#!/bin/bash
+
+
+#Set the file path to the ConnectionProfiles file with the loggedIn user
+connectionProfiles="/Users/$3/.config/AWSVPNClient/ConnectionProfiles"
+
+#make the file
+cat <<EOF > "$connectionProfiles"
+{"Version":"1","LastSelectedProfileIndex":0,"ConnectionProfiles":[{"ProfileName":"Wayflyer","OvpnConfigFilePath":"/Users/$3/.config/AWSVPNClient/OpenVpnConfigs/Wayflyer","CvpnEndpointId":"","CvpnEndpointRegion":"","CompatibilityVersion":"2","FederatedAuthType":1}]}
+EOF
+
+#Fix permissions
+
+#chown "$loggedInUser" "$connectionProfiles"

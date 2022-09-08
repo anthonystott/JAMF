@@ -1,0 +1,2 @@
+﻿#!/bin/bash
+/usr/local/jamf/bin/jamf displayMessage -message "Please Contact Wayflyer IT with your serial number. #it-support or it-support@wayflyer.com"

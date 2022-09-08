@@ -1,0 +1,4 @@
+﻿#!/bin/bash
+killall "acvc-openvpn"
+killall "AWS VPN Client"
+exit 0

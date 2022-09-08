@@ -1,0 +1,22 @@
+﻿#!/bin/bash
+path=""
+
+if [[ -f "/Library/Icons/PNG-Spiral-arkphire.icns" ]];then
+path="/Library/Icons/PNG-Spiral-arkphire.icns"
+else
+path="/Applications/Self Service.app/Contents/Resources/AppIcon.icns"
+fi
+
+jamfHelper=$(/Library/Application\ Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper \
+-windowType utility \
+-icon "$path" \
+-heading "Updates available" \
+-description "New updates are available for your computer in Self Service, these updates will be automatically installed Fridays after 3:30pm. if you wish to install them now please select the Self Service button" \
+-button1 "Self Service" \
+-button2 "Defer")
+
+if [[ $jamfHelper == 0 ]]; then
+
+open -a "Self Service.app"
+
+fi

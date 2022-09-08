@@ -1,0 +1,26 @@
+﻿#!/bin/sh
+
+
+preFix="WAY-"
+serial_no=$(ioreg -c IOPlatformExpertDevice -d 2 | awk -F\" '/IOPlatformSerialNumber/{print $(NF-1)}')
+postFix="-macOS"
+username=`ls -l /dev/console | cut -d " " -f 4`
+modelName=`system_profiler SPHardwareDataType | grep "Model Identifier" | awk '{print $3}' | sed 's/[0-9]*//g' | tr -d ','`
+
+computerName="${preFix}""$username""-""$modelName"
+
+function renameComputer(){
+    #Set New Computer Name
+    echo "The New Computer name is: $computerName"
+    /usr/sbin/scutil --set HostName "$computerName"
+    /usr/sbin/scutil --set ComputerName $computerName
+    
+    /usr/sbin/scutil --set LocalHostName $computerName
+    
+
+    echo Rename Successful
+}
+
+###Script
+renameComputer
+exit 0

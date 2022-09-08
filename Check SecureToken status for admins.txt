@@ -1,0 +1,18 @@
+﻿#!/bin/bash
+
+localUsers=$(dscl . list /Users | grep -v ^_.*)
+
+for i in $localUsers; do
+	
+if groups $i | grep -q -w admin; 
+then 
+	secureTokenStatus=$(sysadminctl -secureTokenStatus $i 2>&1 | /usr/bin/awk '{ print $7 }')
+	if [[ $secureTokenStatus == "ENABLED" ]];
+	then
+		echo "User $i is an admin and has SecureToken On"
+	elif [[ $secureTokenStatus == "DISABLED" ]]; then
+		echo "User $i is an admin and has SecureToken Off"
+	fi
+	
+fi
+done

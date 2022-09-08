@@ -1,0 +1,8 @@
+﻿#!/bin/bash
+# $3 - logged in user
+sudo -u $3 /usr/bin/osascript <<ENDofOSAscript
+tell Application "Finder"
+set the desktop picture to {"Library:Desktop Pictures:Mac 3072x1920.jpg"} as alias
+end tell
+ENDofOSAscript
+exit 0
