@@ -1,0 +1,5 @@
+﻿#!/bin/bash
+# Allows any user to change the date and time on their Mac.
+
+security authorizationdb write system.preferences allow
+security authorizationdb write system.preferences.datetime allow
